@@ -41,5 +41,14 @@ pipeline {
                 bat '"%DOCKER_EXE%" push %IMAGE%:%BUILD_NUMBER%'
             }
         }
+
+        stage('Deploy image') {
+            steps {
+                bat '''@echo off
+"%DOCKER_EXE%" rm -f tp4-pipeline-app >NUL 2>&1
+"%DOCKER_EXE%" run -d --name tp4-pipeline-app -p 8083:80 %IMAGE%:%BUILD_NUMBER%
+'''
+            }
+        }
     }
 }
